@@ -44,6 +44,15 @@ class OrderController @Inject constructor(
                     call.respond(HttpStatusCode.NotFound, "User not found")
                 }
             }
+            get("/user/{userName}") {
+                val userName = call.parameters["userName"] ?: return@get call.respond(
+                    HttpStatusCode.BadRequest,
+                    "Missing name parameter"
+                )
+                logger.info("Received GET request to /api/v1/order/$userName")
+                val user = orderUseCase.getOrderByName(userName)
+                call.respond(user)
+            }
         }
     }
 }

@@ -6,3 +6,9 @@ data class OrderDTO(
     val item: String,
     val quantity: Int
 )
+
+data class UserOrderDTO(
+    val userFirstname : String,
+    val userLastname : String,
+    val orders: List<OrderDTO>
+)

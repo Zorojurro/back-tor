@@ -9,3 +9,10 @@ data class OrderModel(
     val item: String,
     val quantity: Int
 )
+
+@Serializable
+data class UserOrderModel(
+    val userLastname: String,
+    val userFirstname: String,
+    val orders: List<OrderModel>
+)
