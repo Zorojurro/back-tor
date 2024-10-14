@@ -1,5 +1,6 @@
 package com.example
 
+import com.example.domain.core.ErrorHandlerRepository
 import com.example.routing.configureRouting
 import com.example.routing.contentNegotiation
 import io.ktor.server.application.*
@@ -13,4 +14,15 @@ fun main() {
 fun Application.module() {
     configureRouting()
     contentNegotiation()
+}
+
+suspend fun ApplicationCall.safeExecute(
+    exceptionHandler: ErrorHandlerRepository,
+    block: suspend () -> Unit
+) {
+    try {
+        block()
+    } catch (e: Throwable) {
+        exceptionHandler.handleException(this, e)
+    }
 }

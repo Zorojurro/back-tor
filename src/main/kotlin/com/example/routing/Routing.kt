@@ -13,7 +13,8 @@ fun Application.configureRouting() {
     val appComponent = DaggerAppComponent.create()
     val userController = UsersController(
         usersUseCase = appComponent.createUserUseCase(),
-        logger = appComponent.logger()
+        logger = appComponent.logger(),
+        exceptionHandlerRepository = appComponent.errorHandler()
     )
     val orderController = OrderController(
         orderUseCase = appComponent.createOrderUseCase(),

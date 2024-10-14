@@ -1,11 +1,13 @@
 package com.example.data.di
 
+import com.example.data.core.DefaultErrorHandler
 import com.example.data.infra.DatabaseModule
 import com.example.data.order.database.OrderDao
 import com.example.data.order.repository.OrderRepositoryImpl
 import com.example.data.user.database.UserDao
 import com.example.data.user.repository.UserRepositoryImpl
 import com.example.domain.core.ConsoleLogger
+import com.example.domain.core.ErrorHandlerRepository
 import com.example.domain.core.Logger
 import com.example.domain.order.repository.OrderRepository
 import com.example.domain.order.usecase.OrderUseCase
@@ -65,5 +67,11 @@ object AppModule {
     @Singleton
     fun provideLogger(): Logger {
         return ConsoleLogger()
+    }
+
+    @Provides
+    @Singleton
+    fun provideErrorRepository(): ErrorHandlerRepository {
+        return DefaultErrorHandler(ConsoleLogger())
     }
 }

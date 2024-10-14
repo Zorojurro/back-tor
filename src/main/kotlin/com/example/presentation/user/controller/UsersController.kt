@@ -1,7 +1,9 @@
 package com.example.presentation.user.controller
 
+import com.example.domain.core.ErrorHandlerRepository
 import com.example.domain.core.Logger
 import com.example.domain.users.usecase.UsersUseCase
+import com.example.safeExecute
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
@@ -15,14 +17,17 @@ import javax.inject.Inject
 
 class UsersController @Inject constructor(
     private val usersUseCase: UsersUseCase,
-    private val logger: Logger
+    private val logger: Logger,
+    private val exceptionHandlerRepository : ErrorHandlerRepository
 ) {
     fun addUsersRoutes(route: Route) {
         route.route("api/v1/users") {
             get {
-                logger.info("Received GET request to /api/v1/users")
-                val users = usersUseCase.getAllUser()
-                call.respond(users)
+                call.safeExecute(exceptionHandler = exceptionHandlerRepository) {
+                    logger.info("Received GET request to /api/v1/users")
+                    val users = usersUseCase.getAllUser()
+                    call.respond(users)
+                }
             }
             post {
                 val params = call.receive<Map<String, String>>()
